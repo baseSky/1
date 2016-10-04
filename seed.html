@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <?php if($par=='default' && $openid==$order['openid']){?>
+        <title>我的果树</title>
+    <?php }else{?>
+        <title>他人果树</title>
+    <?php }?>
+	<meta http-equiv="Expires" Content="-1">
+    <meta name="description" content="{$reply['description']}">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta http-equiv="cleartype" content="on">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" /> -->
+    <script type="text/javascript">
+		var phoneWidth = parseInt(window.screen.width);
+		var phoneScale = phoneWidth/640;
+		
+		var ua = navigator.userAgent;
+		if (/Android (\d+\.\d+)/.test(ua)){
+			var version = parseFloat(RegExp.$1);
+			// andriod 2.3
+			if(version>2.3){
+				document.write('<meta name="viewport" content="width=640, minimum-scale = '+phoneScale+', maximum-scale = '+phoneScale+', target-densitydpi=device-dpi">');
+			// andriod 2.3以上
+			}else{
+				document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+			}
+			// 其他系统
+		} else {
+			document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">');
+		}
+	</script>	
+    <!-- <meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi"> -->
+    <link rel="stylesheet" type="text/css" href="../addons/stonefish_planting/template/css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="../addons/stonefish_planting/template/css/mobile.css?20130310"/>
+	<script type="text/javascript" src="../addons/stonefish_planting/template/js/zepto.js"></script>
+	<style type="text/css">
+		.cloud_touch {top:415px;left:20px;width:150px;}
+		.cloud_touch1 {top:415px;left:170px;width:150px;}
+		.cloud_touch2 {top:415px;left:320px;width:150px;}
+		.cloud_touch3 {top:415px;left:470px;width:150px;}
+		.cloud_touch4 {top:420px;left:470px;width:100px;}
+		.cloud_touch5 {top:280px;-left:470px;width:200px;position: fixed;}
+		.cloud_touch5 img {width:150px;-border:1px solid black;margin-left: 25%;}
+		.cloud_touch5 .p1 {line-height: 27px;border:3px solid black;border-radius: 35px 15px 35px 15px;margin-bottom: 10px;padding: 10px;box-shadow: 2px 2px 3px 0px rgba(0,0,0,.5);}
+		.cloud_touch5 .p1 p {width:60px;height:30px;background: green;border-radius: 10px;margin-top: 10px;margin-left: 25%;font-size: 14px;text-align: center;}
+        .cloud_touch5 .p2 {width:0; height:0; border-width:30px 10px 0px 10px; border-style:solid; border-color:black transparent  transparent  transparent ;margin-top: -10px;margin-left: 30%;}
+        .cloud_touch9 {top:173px;left:-28px;width:200px;}
+        .cloud_touch10 {top:220px;left:-25px;width:110px;}
+        .cloud_touch7 {top:60px;-left:300px;width:60px;z-index: 100;}
+		.fertilizer  {
+			position: absolute;
+		    z-index: 49;
+		    top: 220px;
+		    left:25%;
+		    overflow: hidden;
+		    background: url(../images/rain_bg1.png) center bottom no-repeat;
+		}
+		<?php if($order['isseedover']==1){?>
+			.over{position: absolute;z-index: 999;width: 100%;height: 100%;background: #272822;opacity:0.7;}
+		<?php }else{?>
+			.over{position: absolute;z-index: 999;width: 100%;height: 100%;background: #272822;opacity:0.7;display: none;}
+		<?php }?>		
+	</style>
+</head>
+<body><!--  -->
+<div class="over">
+	<div style="width: 50%;height: 150px;margin: 300px auto;opacity:1;color: #BB0000;background: #ccc;border: 1px solid black;">您的果树已经结期,请种植其他果树</div>
+</div>
+<div class="wrap" ontouchmove="event.preventDefault()" style="height:540px;">
+	<img src="../addons/ewei_shop/template/mobile/default/static/images/shanm.png" class="img">
+
+	<?php 
+		if($seed['total']==1){
+			$left="margin-left:40%";
+		}elseif($seed['total']==2){
+			$left="margin-left:20%";
+		}
+	?>
+	<div style="position:absolute;top:409px;z-index: 1;margin-top:200px;<?php echo $left;?>">
+		<?php for($i=0;$i < $seed['total'];$i++){?>
+			<div  style="width:33%;float:left;margin-top:-10px;">
+				<img src="../attachment/<?php echo $seed[$seedimg]?>" class='seedimg' style="width: 100%">
+			</div>
+		<?php }?>
+	</div>
+	
+
+	<?php if($par=='default' && $openid==$order['openid']){?>
+	    <img src="../addons/stonefish_planting/template/images/water.png" class="spirit cloud_touch zhiyin" style="z-index:100">
+	    <img src="../addons/stonefish_planting/template/images/shifei.png" class="spirit cloud_touch1 zhiyin1" style="z-index:100" >
+	    <img src="../addons/stonefish_planting/template/images/miechong.png" class="spirit cloud_touch2 zhiyin2" style="z-index:100" >
+	    <?php if($order['isgrowned']==1){?>
+	        <img src="../addons/stonefish_planting/template/images/caizhai.png" class="spirit cloud_touch3 zhiyin3" style="z-index:100" >
+	    <?php }else{?>
+	        <img src="../addons/stonefish_planting/template/images/caizhai.png" style="display: none;" class="spirit cloud_touch3 zhiyin3" style="z-index:100" >
+	    <?php }?>
+	    <img src="../addons/stonefish_planting/template/images/caizhai.png" style="display: none;" class="spirit cloud_touch3 zhiyin3" style="z-index:100" >
+	<?php }else{?>
+	     <img src="../addons/stonefish_planting/template/images/tou.png" class="spirit cloud_touch4 zhiyin4" style="z-index:100" >
+	<?php }?>
+
+	<?php if(!empty($dog)){?>
+        <div class="spirit cloud_touch5" ><img src="{php echo $dogimgs[0]}" /></div>
+        <?php if($par=='default' && $openid==$order['openid']){?>
+            <img src="{php echo $dogimgs[7]}" class="spirit cloud_touch9" style="display: none;" />
+            <img src="{php echo $dogfoodimgs[1]}" class="spirit cloud_touch10" style="display: none;" />
+            <img src="{php echo $dogfoodimgs[0]}" class="spirit cloud_touch7" />
+        <?php }?>
+    <?php }?>
+
+<script>
+   /* $(function(){
+        $(".cloud_touch1").click(function(){
+            $(".shiFei").toggle();
+        })
+    })*/
+</script>
+	
+	<div class="info">
+		<img src="../addons/stonefish_planting/template/images/info.png" alt="">
+	</div>
+</div>
+<div class="jifen" style="height:100%;width:100%;margin-top:30%;left:0">
+    <div class="lefts" onclick="lefts()" style="height:210px;float:left;background:#A7C90E;position:absolute;bottom:3%;color:#fff;opacity: 0.6;width:50px;line-height:70px;">收<br>起</div>
+    <div class="rights" onclick="lefts()" style="height:210px;float:left;background:#A7C90E;display:none;position:absolute;bottom:3%;color:#fff;opacity: 0.6;width:50px;line-height:70px;">展<br>开</div>
+<div class="Middle" style="background:#fff;position:absolute;float:left;left:50px;bottom:3%;opacity:0.5;line-height:35px;text-align: left;">
+	<p>&nbsp;&nbsp;已养护: <span class="seednum"><?php echo $order['seednum'];?>次</span>&nbsp;&nbsp;&nbsp;已生长: <?php echo $order['seedday'];?> 天&nbsp;&nbsp;</p>
+	<p>&nbsp;&nbsp;当前状态: <span class="grownname"><?php echo $grownname;?></span>&nbsp;&nbsp;&nbsp;认耕果树: <?php echo $seed['total']?> 棵&nbsp;&nbsp;</p>
+	<p>&nbsp;&nbsp;预计收获果实: <?php echo $seedmoney3?> - <?php echo $seedmoney4?> 个</p>
+	<p>&nbsp;&nbsp;剩余狗粮: <span class="dfn"><?php echo $dogfood['total']?></span> 个</p>
+	<div class="time">
+		<span >&nbsp;&nbsp;距下次养护还有: </span>
+	    <!-- <span style="display: none;" id="t_d">00 天</span> -->
+	    <span id="t_h">00 时</span>
+	    <span id="t_m">00 分</span>
+	    <span id="t_s">00 秒&nbsp;&nbsp;</span>
+  	</div>
+  	<p <?php if($openid!=$order['openid'] || $lost==0){?>style="visibility:hidden;"<?php }?>><a href="{php echo $this->createMobileUrl('order/toulog',array('id' => $_GPC['id']))}" style="color: blue;">&nbsp;&nbsp;查看果树丢失情况</a>
+    </p>
+</div>
+</div>
+<!-- <a href="{php echo $this->createMobileUrl('index',array('rid'=>$rid,'from_user'=>$page_from_user))}"><img src="../addons/stonefish_planting/template/images/{$firendExistsimg}.png" class="btn_rule"></a> -->
+<audio preload="auto" id="audio1" controls="controls">
+	<source src="../addons/stonefish_planting/template/audio/rain.mp3" type="audio/mpeg">
+</audio>
+<audio preload="auto" id="audio2" controls="controls">
+	<source src="../addons/stonefish_planting/template/audio/tree.mp3" type="audio/mpeg">
+</audio>
+<!-- <div id="pop_share"><img src="{php echo toimage($share['share_pic'])}" width="100%" alt="分享到朋友圈"/></div> -->
+<script>
+  function GetRTime(){
+    var EndTime= new Date('<?php echo $times_y;?>/<?php echo $times_m;?>/<?php echo $times_d?> <?php echo $times_his;?>');
+    var NowTime = new Date();
+    var t =EndTime.getTime() - NowTime.getTime();
+    //var d=0;
+    var h=0;
+    var m=0;
+    var s=0;
+    if(t>=0){
+      //d=Math.floor(t/1000/60/60/24);
+      h=Math.floor(t/1000/60/60%24);
+      m=Math.floor(t/1000/60%60);
+      s=Math.floor(t/1000%60);
+    }
+ 
+ 
+    //document.getElementById("t_d").innerHTML = d + "天";
+    document.getElementById("t_h").innerHTML = h + "时";
+    document.getElementById("t_m").innerHTML = m + "分";
+    document.getElementById("t_s").innerHTML = s + "秒";
+  }
+  setInterval(GetRTime,1000);
+</script>
+<script type="text/javascript">
+	var waterday = 0;
+	var htmlpath = '../addons/stonefish_planting/template/';
+	var clickEvent = 'touchstart';
+	var haswatered = 0;
+	var rainInterval = '';
+    var infoInterval = '';
+    var canTouch = true;
+	var shengzhang = 0;
+	var showinfopng = 0;
+	var width=window.screen.availWidth;
+    var height=window.screen.availHeight;
+    var x = 0;
+    var jishi = '';
+    var dog1 = '{php echo $dogimgs[0]}';
+    var dog2 = '{php echo $dogimgs[1]}';
+   
+    var str1 = '创造我的艺哥哥是最帅哒...';
+    var str2 = '只要有我在,就算那厮飞进庄园也是枉然~';
+            
+        
+	window.onload=function(){
+	    <?php if(!empty($dog)){?>
+	        dog();
+	    <?php }?>
+	}
+	$(function() {
+	    if(0 == 0){
+			zhiyinEvent();
+        }else{
+		    setJifen('',true);
+		}
+		$("#shareimg").click(function(){
+		   	$("#pop_share").show();
+	   	});
+
+	   	$("#pop_share").click(function(){
+		  	$("#pop_share").hide();
+	    });
+        $(".lefts").click(function(){
+            $(this).hide();
+            $(".Middle").hide();
+            $(".rights").show();
+        });
+        $(".rights").click(function(){
+            $(this).hide();
+            $(".Middle").show();
+            $(".lefts").show();n
+        });
+
+        $('.cloud_touch7').bind('touchend',function(){
+            $.ajax({type:"POST",url:"{php echo $this->createMobileUrl('order/seed',array('op' => 'dogfood','id' => $_GPC['id']))}",dataType:"json",async:true,timeout:3000,success:function(data2){
+                    if(data2.msg=='-1'){
+                        if(confirm('您没有狗粮了哦,是否立即前往购买?')){
+                            // window.location.href="{php echo $this->createMobileUrl('shop/detail',array('id'=>$trade['dogfoodid']))}";
+                            window.location.href="http://hz.tianyeyunshang.com/app/index.php?i=61&c=entry&p=designer&pageid=37&m=ewei_shop&do=plugin";
+                        }
+                    }else if(data2.msg=='-2'){
+                        alert('您的狗现在还不饿,稍后再喂吧');
+                    }else if(data2.msg=='-3'){
+                        alert('您的狗今天吃的够多了,明天再喂吧');
+                    }else if(data2.msg=='1'){
+                        $('.cloud_touch7').css({'-webkit-transition':'all 2s','-webkit-transform':'translate(-750px,900px) scale(0)'});
+                        setTimeout(function(){
+                            $('.cloud_touch7').css({'-webkit-transition':'all 1s','-webkit-transform':'scale(1)'});
+                        },2000);
+                        /*$('.cloud_touch6 .p1').html('开饭喽...开饭喽...开饭喽...开饭喽...开饭喽...');
+                        $('.cloud_touch6 img').attr('src','{php echo $dogimgs[7]}');*/
+                        $('.cloud_touch10').attr('style','display:block');
+                        setTimeout(function(){
+                            $('.cloud_touch6').attr('style','display:none');
+                            $('.cloud_touch10').attr('style','display:none');
+                            $('.cloud_touch9').attr('style','display:block');
+                        },3000)
+                        
+                        setTimeout(function(){
+                            $('.cloud_touch9').attr('style','display:none');
+                            $('.cloud_touch5').attr('style','display:block');
+                        },7000);
+                        $('.dfn').html(data2.dfn);
+                        /*if(data2.level=='1'){
+                            dog1 = '{php echo $dogimgs[2]}';
+                            dog2 = '{php echo $dogimgs[3]}';
+                        }else if(data2.level=='2'){
+                            dog1 = '{php echo $dogimgs[4]}';
+                            dog2 = '{php echo $dogimgs[5]}';
+                        }*/
+                        dog();
+                    }
+            },error:function(xhr,type){
+                alert("发送网络请求失败！");
+            }})
+        })
+       
+
+        //$('.cloud_touch').click(function(){
+		$('.zhiyin').bind("touchend",function(){
+			$.ajax({type: "POST",url:"{php echo $this->createMobileUrl('order/seed',array('act'=>1,'id' => $_GPC['id']))}",dataType: "json",async: true,timeout: 3000,success: function(data) {
+					if(data.msg==-1 || data.msg==-2 || data.msg==-3){
+						showinfopng = 1;
+						showInfo();
+						return;
+					}
+					if(data.msg==-4){
+						alert('当前生长期浇水、施肥、灭虫已达到最大上限,过度养护不利于果树生长,请让果树慢慢生长吧~');
+						return;
+					}
+					$('.cloud_touch').css({'-webkit-transition':'all .3s','-webkit-transform':'translate(-85px,150px) scale(3)','z-index':'100'});
+		            //$('.cloud_touch').css({'-webkit-transform':'scale(1.5)','-webkit-transition':'all .3s'});
+		            $('#cloud_touch').hide();
+		            $("audio")[0].play();
+		            shengzhang = 0;
+		            rainEvent();
+		            //addJifen();
+
+		            setTimeout(function(){
+		                rainOverEvent();
+		            },3000);
+					showinfopng = 0;
+					if(data.msg==2){
+						//更新养护数量
+						$('.seednum').html(data.seednum);
+						//$('.seedimg').attr('src','../attachment/'+data.seedimg)
+						//$('.grownname').html(data.grownname);
+						/*showinfopng = 1;
+						showInfo();*/
+						return;
+					}
+					if(data.msg==3){
+						$('.seednum').html(data.seednum);
+						//$('.seedimg').attr('src','../attachment/'+data.seedimg)
+						//$('.grownname').html(data.grownname);
+						alert('您的果实已成熟,可以采摘啦~')
+						/*showinfopng = 1;
+						showInfo();*/
+						return;
+					}
+		    },error: function(xhr, type) {
+		        alert("发送网络请求失败！")
+		    }});
+	   	});
+
+	   	$('.zhiyin1').bind("touchend",function(){
+			$.ajax({type: "POST",url:"{php echo $this->createMobileUrl('order/seed',array('act'=>2,'id' => $_GPC['id']))}",dataType: "json",async: true,timeout: 3000,success: function(data) {
+					if(data.msg=='-1' || data.msg=='-2' || data.msg=='-3'){
+						showinfopng = 1;
+						showInfo();
+						return;
+					}
+					if(data.msg==-4){
+						alert('当前生长期浇水、施肥、灭虫已达到最大上限,过度养护不利于果树生长,请让果树慢慢生长吧~');
+						return;
+					}
+
+					$('.cloud_touch1').css({'-webkit-transition':'all .3s','-webkit-transform':'translate(100px,150px) scale(3)','z-index':'100'});
+		            //$('.cloud_touch').css({'-webkit-transform':'scale(1.5)','-webkit-transition':'all .3s'});
+		            /*$('#cloud_touch').hide();*/
+		            $("audio")[0].play();
+		            /*shengzhang = 0;
+		            rainEvent();*/
+		            //addJifen();
+		            
+		            setTimeout(function(){
+		                $('.cloud_touch1').css({'-webkit-transform':'scale(1)','-webkit-transition':'all .3s'});
+		            },3000);
+					showinfopng = 0;
+					showInfo();
+					if(data.msg==2){
+						//更新养护数量
+						$('.seednum').html(data.seednum);
+						//$('.seedimg').attr('src','../attachment/'+data.seedimg)
+						//$('.grownname').html(data.grownname);
+						/*showinfopng = 1;
+						showInfo();*/
+						return;
+					}
+					if(data.msg==3){
+						$('.seednum').html(data.seednum);
+						//$('.seedimg').attr('src','../attachment/'+data.seedimg)
+						//$('.grownname').html(data.grownname);
+						alert('您的果实已成熟,可以采摘啦~')
+						/*showinfopng = 1;
+						showInfo();*/
+						return;
+					}
+					/*//更新养护数量
+					var seednum = Number($('.seednum').html())+1;
+					$('.seednum').html(seednum);*/
+
+		    },error: function(xhr, type) {
+		        alert("发送网络请求失败！")
+		    }});
+	   	});
+
+	   	$('.zhiyin2').bind("touchend",function(){
+			$.ajax({type: "POST",url:"{php echo $this->createMobileUrl('order/seed',array('act'=>3,'id' => $_GPC['id']))}",dataType: "json",async: true,timeout: 3000,success: function(data) {
+					if(data.msg=='-1' || data.msg=='-2' || data.msg=='-3'){
+						showinfopng = 1;
+						showInfo();
+						return;
+					}
+					if(data.msg==-4){
+						alert('当前生长期浇水、施肥、灭虫已达到最大上限,过度养护不利于果树生长,请让果树慢慢生长吧~');
+						return;
+					}
+					$('.cloud_touch2').css({'-webkit-transition':'all .3s','-webkit-transform':'translate(0,150px) scale(3)','z-index':'100'});
+		            $("audio")[0].play();
+		            /*setTimeout(function(){
+			            waterEvent();
+			        },600);*/
+		            
+		            setTimeout(function(){
+		                $('.cloud_touch2').css({'-webkit-transform':'scale(1)','-webkit-transition':'all .3s'});
+		            },3000);
+					showinfopng = 0;
+					showInfo();
+					if(data.msg==2){
+						//更新养护数量
+						$('.seednum').html(data.seednum);
+						//$('.seedimg').attr('src','../attachment/'+data.seedimg)
+						//$('.grownname').html(data.grownname);
+						/*showinfopng = 1;
+						showInfo();*/
+						return;
+					}
+					if(data.msg==3){
+						$('.seednum').html(data.seednum);
+						//$('.seedimg').attr('src','../attachment/'+data.seedimg)
+						//$('.grownname').html(data.grownname);
+						alert('您的果实已成熟,可以采摘啦~')
+						/*showinfopng = 1;
+						showInfo();*/
+						return;
+					}
+					
+		    },error: function(xhr, type) {
+		        alert("发送网络请求失败！")
+		    }});
+	   	});
+
+	   	$('.zhiyin3').bind("touchend",function(){
+			$.ajax({type: "POST",url:"{php echo $this->createMobileUrl('order/seed',array('op' => 'pick','id' => $_GPC['id']))}",dataType: "json",async: true,timeout: 3000,success: function(data) {
+
+				$('.cloud_touch3').css({'-webkit-transition':'all .3s','-webkit-transform':'translate(0,150px) scale(3)','z-index':'100'});
+		            $("audio")[0].play();
+		            /*setTimeout(function(){
+			            waterEvent();
+			        },600);*/
+		            
+		            setTimeout(function(){
+		                $('.cloud_touch3').css({'-webkit-transform':'scale(1)','-webkit-transition':'all .3s'});
+		            },3000);
+		            if(data.msg=='-5'){
+		            	alert('请刷新重试');
+		            	return;
+		            }
+					if(data.msg=='4'){
+						var go=confirm('已采摘,请前往我的果实中查看,是否立即进行下一期种植?');
+						if(go==null || go==false){
+							//document.write("{php echo $this->createMobileUrl('order',array('cate'=>220,'status' =>'gs', 'seed' => 1))}")
+							//window.location.href="{php echo $this->createMobileUrl('order',array('cate'=>220,'status' =>'gs', 'seed' => 1))}";
+							window.location.href="{php echo $this->createMobileUrl('order',array('cate'=>220,'status' =>'gshi', 'seed' => 1))}";
+							return;
+						}
+						window.location.href="{php echo $this->createMobileUrl('order',array('cate'=>220,'status' =>'gshi', 'seed' => 1))}";
+						return;
+					}else if(data.msg=='5'){
+						alert('您的果实已采摘，该果树已结期，请种植其他果树');
+						$('.over').attr('style','display:block;');
+						//window.location.href="{php echo $this->createMobileUrl('order/seed', array('id' => $_GPC['id']))}";
+						window.location.href="{php echo $this->createMobileUrl('order',array('cate'=>220,'status' =>'gshi', 'seed' => 1))}";
+						return;
+					}
+
+		    },error: function(xhr, type) {
+		        alert("发送网络请求失败！")
+		    }});
+	   	});
+
+	   	$('.zhiyin4').bind("touchend",function(){
+                    $.ajax({type: "POST",url:"{php echo $this->createMobileUrl('order/seed',array('op' => 'tou','par' => 'tou','id' => $_GPC['id']))}",dataType: "json",async: true,timeout: 3000,success: function(data) {
+                            if(data.msg=='-55'){
+                                alert('您已经偷过了,不可以再偷了哦~');
+                                window.location.href="{php echo $this->createMobileUrl('order',array('cate'=>220,'status' =>'othergs', 'seed' => 1))}";
+                                return;
+                            }else if(data.msg=='44'){
+                                $('.cloud_touch4').css({'-webkit-transition':'all .5s','-webkit-transform':'translate(-150px,150px) scale(3)','z-index':'100'});
+                                $("audio")[0].play();
+                                setTimeout(function(){
+                                    $('.cloud_touch4').css({'-webkit-transform':'scale(1)','-webkit-transition':'all .3s'});
+                                    $("audio")[0].pause();
+                                    $("audio")[1].play();
+                                },3000);
+
+                                setTimeout(function(){
+                                    alert('恭喜您采摘到了'+data.num+'个果实,已转入到达您的果实账户中,请前往庄主府进行查看');
+                                    $('.zhiyin4').attr('style','display:none');
+                                },4000);
+                            }else if(data.msg=='-66'){
+                                alert('该果树已经达到最大采摘上限,不可以再偷了哦~');
+                                window.location.href="{php echo $this->createMobileUrl('order',array('cate'=>220,'status' =>'othergs', 'seed' => 1))}";
+                                return;
+                            }else if(data.msg=='-77'){
+                                alert('该果树还未成熟,请稍后再来吧~');
+                            }else if(data.msg=='-88'){
+                            	alert('您的认耕总额不足以偷取该用户,请努力认耕后再来吧~');
+                            }else if(data.msg=='55'){
+                                $('.cloud_touch4').css({'-webkit-transition':'all .5s','-webkit-transform':'translate(-150px,150px) rotate(-720deg) scale(2)','z-index':'100'});
+                                $("audio")[0].play();
+                                setTimeout(function(){
+                                    //$('.cloud_touch4').css({'-webkit-transform':'scale(1)','-webkit-transition':'all .3s'});
+
+                                    str1 = '恶贼！休想全身而退！';
+                                    str2 = '恶贼！休想全身而退！';
+                                    $('.cloud_touch4').css({'-webkit-transition':'all .5s','-webkit-transform':'translate(-150px,150px) scale(1)','z-index':'99'});
+                                    $('.cloud_touch5').css({'-webkit-transition':'all .5s','-webkit-transform':'translate(200px,260px) scale(2)','z-index':'100'});
+                                    $("audio")[0].pause();
+                                    $("audio")[1].play();
+                                },3000);
+
+                                setTimeout(function(){
+                                    alert('您被庄园的狗发现了,此次未能偷到果实');
+                                    $('.zhiyin4').attr('style','display:none');
+                                },4000);
+                            }else{
+                                alert('哎呦~出错了,请提交问题反馈,程序猿猿马上为您解决~');
+                            }
+
+                    },error: function(xhr, type) {
+                        alert("发送网络请求失败！")
+                    }});
+                });
+
+	});
+
+			function dog(){
+                setInterval(function(){
+                    var height1 = Math.floor(Math.random()*(height-480)+280);
+                    var width1 = Math.floor(Math.random()*width);
+                    var x = $('.cloud_touch5').offset().left;
+                    if(width1>=x){
+                        $('.cloud_touch5 img').attr('src',dog1);
+                        $('.cloud_touch5 img').prev().remove();
+                        $('.cloud_touch5 img').prev().remove();
+                        $(".cloud_touch5 img").before("<p class='p1' onclick='dada()' >"+str1+"</p>");
+                        /*$('.cloud_touch5 .p1').append("<p>朕知道了</p>");*/
+                        $(".cloud_touch5 img").before("<p class='p2' style='margin-left:60%'></p>"); 
+                    }else{
+                        $('.cloud_touch5 img').attr('src',dog2);
+                        $('.cloud_touch5 img').prev().remove();
+                        $('.cloud_touch5 img').prev().remove();
+                        $(".cloud_touch5 img").before("<p class='p1' onclick='dada()'>"+str2+"</p>"); 
+                        /*$('.cloud_touch5 .p1').append("<p>朕知道了</p>");*/
+                        $(".cloud_touch5 img").before("<p class='p2'></p>"); 
+                    }
+                    $('.cloud_touch5').css({'-webkit-transition':'all 3s linear','-webkit-transform':'translate('+width1+'px,'+height1+'px)'});
+                },3000);
+            }
+
+
+    function showInfo(){//显示还剩几天
+        if(!canTouch) return;
+        canTouch = false;
+        if(showinfopng > 0){
+            $('.info img').attr('src',htmlpath+'images/infoday.png');
+        }else if(showinfopng == 0){
+            $('.info img').attr('src',htmlpath+'images/infoend.png');
+        }else{
+		    $('.info img').attr('src',htmlpath+'images/info.png');
+		}
+        $('.info').addClass('info_on').show();
+        clearTimeout(infoInterval);
+        infoInterval = setTimeout(function(){
+            $('.info').removeClass('info_on').hide();
+            haswatered = 1;
+            canTouch = true;
+            $('#cloud_touch').show();
+        },3000);
+    }
+    function setJifen(num,isfirst){//设置积分
+        var _strNum = String(num);
+        var _jifen = '';
+        if(isfirst){
+            for(var i=0; i<_strNum.length; i++){
+                _jifen += '<span><img src="'+htmlpath+'images/num_'+_strNum[i]+'.png" alt=""></span>';
+            }
+            $('.jifen .num').html(_jifen);
+        }else{
+            var _oldL = $('.jifen .num span').length;
+            var _newL = _strNum.length;
+            for(var i=0; i<_newL - _oldL; i++){
+                $('.jifen .num').prepend('<span><img src="'+htmlpath+'images/num_0.png" alt=""></span>');
+            }
+            for(var i=0; i<_strNum.length; i++){
+                //'var _jifen'+i+' = \'<img src="\'+htmlpath+\'images/num_\'+_strNum[i]+\'.png" alt="">\'';
+                eval('var _jifen'+i+' = \'<img src="\'+htmlpath+\'images/num_\'+_strNum[i]+\'.png" alt="">\'');
+                $('.jifen .num span').eq(i).append(eval('_jifen'+i));
+            }
+            setTimeout(function(){
+                setJifenAnimate(num);
+            },100);
+            setTimeout(function(){
+                $('.jifen .num span').each(function(i){
+                    $(this).find('img').css({'-webkit-transform':'translate(0,0)','-webkit-transition':'0s all 0s'}).eq(0).remove();
+                });
+            },2000);
+        }
+     }
+
+    function setJifenAnimate(num){
+        var _start = 0;
+       /* if(String({$sharenum}).length == String(num).length){
+            if(String({$sharenum})[0] == String(num)[0]){
+                _start = 1;
+            }
+        }*/
+        for(var i=_start; i<$('.jifen .num span').length; i++){
+            //setTimeout(function(){
+                $('.jifen .num span').eq(i).find('img').css({'-webkit-transform':'translate(0,-42px)','-webkit-transition':0.1*($('.jifen .num span').length-i)*0.5+'s all .3s'});
+            //},100);
+        }
+    }
+    function addJifen(){//增加当前积分
+        var _jifenArr = [1,2,3,4,5,6,7];
+        //var _jifen = _jifenArr[waterday] + {$sharenum};
+		var _jifen = 1 + 0;
+        setJifen(_jifen,false);
+        addJifenAnimate();
+    }
+    function addJifenAnimate(){//浇水加分动画
+        $('.jiafen').html('<img src="'+htmlpath+'images/jifen_day0.png" alt="">');
+        $('.jiafen').addClass('jiafen_on');
+        setTimeout(function(){
+            $('.jiafen').removeClass('jiafen_on');
+        },4000);
+    }
+    function treeGrowup(day,sz){//树成长
+        /*var _nextTree = '<img src="'+htmlpath+'images/tree_'+(day+1)+'.png" class="spirit tree tree_'+(day+1)+'">'
+        $(_nextTree).insertAfter('.tree_'+day);*/
+		if (sz==1){
+		    $('.tree_'+day).animate({'opacity':0},1000);
+            $('.tree_'+(day+1)).animate({'opacity':1},1000);
+			setTimeout(function(){
+                $('.tree_shine').attr('class','tree_shine shine_'+(waterday+1)).show();
+            },1000);
+		}
+        //addJifen();
+        setTimeout(function(){
+            showinfopng = 1;
+			showInfo();
+        },1000);
+        $("audio")[0].pause();
+        $("audio")[1].play();
+    }
+    function rainOverEvent(){//雨停
+        //setTimeout(function(){
+            clearInterval(rainInterval);
+            $('.rain,.waterpoint').hide();
+            if(waterday == 7){
+                $('.cloud_touch').css({'-webkit-transform':'scale(.9)','-webkit-transition':'all .3s'});
+            }else{
+                $('.cloud_touch').css({'-webkit-transform':'scale(1)','-webkit-transition':'all .3s'});
+            }
+        //},1000);
+        treeGrowup(waterday,shengzhang);
+    }
+    function waterEvent(){//雨滴动画
+        var _waters = $('.waterpoint img');
+        var _num = parseInt(Math.random()*_waters.length);
+        $('.waterpoint img').hide();
+        for(var i=0; i<_num; i++){
+            var _point = parseInt(Math.random()*_waters.length);
+            $('.waterpoint img').eq(_point).show();
+        }
+        setTimeout(function(){
+            waterEvent();
+        },200);
+    }
+    function rainEvent(){//下雨动画
+        var _height = '';
+        waterday > 3 ? _height='470px' : _height='340px';
+        setTimeout(function(){
+            $('.rain').show();
+            $('.rain').animate({'height':_height},600);
+            rainInterval = setInterval(function(){
+                $('.rain').toggleClass('raining');
+            },200);
+        },300);
+        setTimeout(function(){
+            waterEvent();
+        },600);
+    }
+    function zhiyinEvent(){//玩法提示
+        //if(waterday > 0) touchCloudEvent();
+        $("#zhiyin").on(clickEvent,function(){
+			_hideZhiyin();
+        });
+		/*$("#zhiyin1").on(clickEvent,function(){
+			_hideZhiyin();
+        });*/
+        function _hideZhiyin(){
+            // $("#touchBox").Swipe(args);
+            $('.mask_zhiyin,.img_zhiyin,.img_hand,.img_arrow').hide();
+			//$('.cloud_animate').removeClass("cloud_animate");
+			$('.cloud_animate').hide();
+			$('#tree_0').hide();
+			$('#tree_1').show();
+			$('.shine1').show();
+			$('.shine2').show();
+			$('.shine3').show();
+			$('.shine4').show();
+			$('.shine5').show();
+			$('.shine6').show();
+			$('.shine7').show();
+			$('.zhiyin').show();
+            setJifen(0,true);
+        }
+    }
+</script>
+</body>
+</html>
